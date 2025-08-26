@@ -1,0 +1,8 @@
+
+project_id = "vnwefdkejobzkszssmge"
+
+[functions.create-user-bypass-email]
+verify_jwt = false
+
+[functions.create-user-public]
+verify_jwt = false

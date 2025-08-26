@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Luna-guard</string>
+    <string name="title_activity_main">Luna-guard</string>
+    <string name="package_name">com.lunaguard.app</string>
+    <string name="custom_url_scheme">com.lunaguard.app</string>
+</resources>
