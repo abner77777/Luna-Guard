@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Login } from './Login';
 import { TabNavigator } from './TabNavigator';
 import { Notifications } from './Notifications';
+import { useAutoLogout } from '@/hooks/useAutoLogout';
+import { useAppSettings } from '@/hooks/useAppSettings';
 import { useAuth } from '@/hooks/useAuth';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -10,7 +12,15 @@ export const LunaGuardApp = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const { user, loading, profile } = useAuth();
   const navigate = useNavigate();
+  const { settings } = useAppSettings();
 
+  // Enable auto-logout with configurable settings
+  useAutoLogout({
+    enabled: settings.autoLogoutEnabled,
+    timeoutSeconds: settings.autoLogoutTimeoutSeconds,
+  });
+
+  
   // Always call useEffect hooks before any conditional returns
   useEffect(() => {
     if (user && profile && profile.role === 'admin') {

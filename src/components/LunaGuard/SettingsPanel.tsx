@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Settings, Wifi, Server, Shield, Lock, Smartphone, Volume2, Vibrate, Info, CheckCircle, XCircle, AlertTriangle, Car, Power } from 'lucide-react';
+import { Settings, Wifi, Server, Shield, Lock, Smartphone, Volume2, Vibrate, Info, CheckCircle, XCircle, AlertTriangle, Car, Power, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { MqttService } from '@/services/mqttService';
+import { useAppSettings } from '@/hooks/useAppSettings';
 
 interface DeviceState {
   isLocked: boolean;
@@ -22,6 +25,7 @@ interface SystemStatus {
 }
 
 export const SettingsPanel = () => {
+  const { settings, updateSettings } = useAppSettings();
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     internet: false,
     mqttServer: false,
@@ -317,6 +321,47 @@ export const SettingsPanel = () => {
                 disabled={isLoading || !systemStatus.mqttServer}
               />
             </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Clock size={20} className="text-muted-foreground" />
+                <div>
+                  <p className="text-sm font-medium">Cierre Automático de Sesión</p>
+                  <p className="text-xs text-muted-foreground">
+                    {settings.autoLogoutEnabled 
+                      ? `Cerrar sesión tras ${settings.autoLogoutTimeoutSeconds}s sin foco` 
+                      : 'Deshabilitado'
+                    }
+                  </p>
+                </div>
+              </div>
+              <Switch 
+                checked={settings.autoLogoutEnabled}
+                onCheckedChange={(checked) => 
+                  updateSettings({ autoLogoutEnabled: checked })
+                }
+              />
+            </div>
+
+            {settings.autoLogoutEnabled && (
+              <div className="pl-10 space-y-2">
+                <Label htmlFor="logout-timeout" className="text-sm">
+                  Tiempo de espera (segundos)
+                </Label>
+                <Input
+                  id="logout-timeout"
+                  type="number"
+                  min="1"
+                  max="300"
+                  value={settings.autoLogoutTimeoutSeconds}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value) || 5;
+                    updateSettings({ autoLogoutTimeoutSeconds: Math.max(1, Math.min(300, value)) });
+                  }}
+                  className="w-24"
+                />
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

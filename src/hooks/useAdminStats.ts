@@ -46,11 +46,6 @@ export function useAdminStats() {
 
   const fetchStats = async () => {
     if (!user || profile?.role !== 'admin') {
-      toast({
-        title: "Error de permisos",
-        description: "Solo administradores pueden acceder a estas estadísticas",
-        variant: "destructive",
-      });
       return;
     }
 

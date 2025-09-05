@@ -2,14 +2,23 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Login } from './Login';
 import { AdminTabNavigator } from './AdminTabNavigator';
+import { useAutoLogout } from '@/hooks/useAutoLogout';
+import { useAppSettings } from '@/hooks/useAppSettings';
 import { useAuth } from '@/hooks/useAuth';
 import { Toaster } from '@/components/ui/toaster';
 import { Button } from '@/components/ui/button';
 
 export const AdminApp = () => {
   const { user, loading, profile } = useAuth();
+  const { settings } = useAppSettings();
   const navigate = useNavigate();
 
+    // Enable auto-logout with configurable settings
+    useAutoLogout({
+      enabled: settings.autoLogoutEnabled,
+      timeoutSeconds: settings.autoLogoutTimeoutSeconds,
+    });
+    
   // Always call useEffect before any conditional returns
   useEffect(() => {
     if (user && profile && profile.role !== 'admin') {
