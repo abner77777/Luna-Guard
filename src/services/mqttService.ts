@@ -11,7 +11,7 @@ interface MqttResponse {
   command?: string;
 }
 
-const MQTT_BASE_URL = 'https://mqtt-broker-service.vercel.app';
+const MQTT_BASE_URL = 'https://mqtt-broker-service-nine.vercel.app';
 
 export class MqttService {
   
